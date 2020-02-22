@@ -1,2 +1,21 @@
-# 8_puzzle_problem_bfs
-This is a coursework project in which 8 Puzzle is solved using Breadth First Search
+# 8 Puzzle Problem
+
+## Libraries Used
+
+1. Python3
+2. Numpy
+3. Time
+4. Copy
+5. Random (Not mandatory)
+
+## Instructions to execute the code
+
+Open folder and change the directory in the terminal. Type the following in the terminal.
+```
+python3 8_puzzle_backtracing.py
+```
+
+For visualization of the output text file, type the following.
+```
+python3 plot_path.py
+```
