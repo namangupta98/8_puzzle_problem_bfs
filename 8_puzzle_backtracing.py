@@ -3,21 +3,21 @@ import random
 import copy
 import time
 
-t = time.time()
-puzzle = []
+t = time.time()  # Stopwatch started
+puzzle = []  # Created an empty list
 # puzzle = np.array([[1, 0, 3], [4, 2, 5], [7, 8, 6]])
 # puzzle = np.arange(9)
 # np.random.shuffle(puzzle)
 # puzzle.shape = (3, 3)
 
-
+# Created class for back tracing the path
 class Tree:
     def __init__(self, child, parent=None, index=0):
         self.child = child
         self.parent = parent
         self.index = index
 
-
+# function to find blank tile's location
 def BlankTileLocation(p):
     for m in range(3):
         for n in range(3):
@@ -25,7 +25,7 @@ def BlankTileLocation(p):
                 pos = m+1, n+1
     return pos
 
-
+# function to backtrace the path
 def backtrace(strate):
     street = []
     current_state = strate
@@ -33,11 +33,14 @@ def backtrace(strate):
         street.append(current_state)
         current_state = current_state.parent
     street.reverse()
+
+    # Create a empty file
     with open('nodePath.txt', 'w') as nPath:
         for current_state in street:
+            # Writing path in the text file
             nPath.writelines(str(current_state.child.flatten('F')).strip('[]')+'\n')
 
-
+# function to move the blank tile left
 def ActionMoveLeft(puzL):
     #m, n = BlankTileLocation(puzL)
     m, n = BlankTileLocation(puzL.child)
@@ -52,7 +55,7 @@ def ActionMoveLeft(puzL):
         stat = 0
     return stat, puzL
 
-
+# function to move the blank tile right
 def ActionMoveRight(puzR):
     m, n = BlankTileLocation(puzR.child)
     if n < 3:
@@ -66,7 +69,7 @@ def ActionMoveRight(puzR):
         stat = 0
     return stat, puzR
 
-
+# function to move the blank tile up
 def ActionMoveUp(puzU):
     m, n = BlankTileLocation(puzU.child)
     if m > 1:
@@ -80,7 +83,7 @@ def ActionMoveUp(puzU):
         stat = 0
     return stat, puzU
 
-
+# function to move the blank tile down
 def ActionMoveDown(puzD):
     m, n = BlankTileLocation(puzD.child)
     if m < 3:
@@ -94,7 +97,7 @@ def ActionMoveDown(puzD):
         stat = 0
     return stat, puzD
 
-
+# function to check the solvability of the puzzle
 def solvable(puzS):
     ctr = 0
     puzS = puzS.flatten()
@@ -104,13 +107,13 @@ def solvable(puzS):
                 ctr += 1
     return ctr
 
-
+# function to check goal achieved or not
 def goalTest(puzG):
     goal = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]])
     compare = puzG.child == goal
     return compare.all()
 
-
+# function to explore tree
 def explorer(puzE):
     queue = []
     puzzled = copy.deepcopy(puzE)
@@ -182,7 +185,7 @@ def explorer(puzE):
     # print(queue, 'Queue')
     return queue
 
-
+# function to implement Breadth First Search
 def bfs(p):
     # parent = {}
     frontier = [p]
@@ -197,11 +200,14 @@ def bfs(p):
         print('Iteration: ', iteration)
         state = frontier.pop(0)
         explored.append(state.child)
+
+        # condition for no parent
         try:
             rf.writelines(str(iteration+1) + ' ' + str(state.index) + ' ' + str(state.parent.index)+'\n')
         except:
             rf.writelines(str(iteration + 1) + ' ' + str(state.index) + ' ' + str(state.index)+'\n')
 
+        # check goal reached or not
         if goalTest(state):
             flg = 1
             backtrace(state)
@@ -223,7 +229,6 @@ def bfs(p):
                     break
 
             if not galf:
-
                 frontier.append(neighbor)
                 # print(frontier, 'Frontier')
     rf.close()
@@ -241,7 +246,7 @@ print(puzzle)
 # if solvable(puzzle) % 2 is 0:
 #     print('Solvable')
 
-
+# Object of class Tree
 start = Tree(puzzle)
 
 if solvable(puzzle) % 2 is 0:
@@ -263,10 +268,9 @@ for i in range(iterat+1):
     exp[i] = exp[i].flatten(order='F')
     nodes.writelines(str(exp[i]).strip('[]')+'\n')
 
+nodes.close()   # close the file
 
-
-nodes.close()
 old_t = t
 t = time.time()
-t_elapsed = t - old_t
+t_elapsed = t - old_t   # Total Time
 print('Total Time Taken: ', t_elapsed, 'ms')
