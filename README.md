@@ -1,5 +1,7 @@
 # 8 Puzzle Problem
 
+This is coursework project for ENPM661: Planning for Autonomous Robots to solve an eight puzzle problem using Breadth First Search method.
+
 ## Libraries Used
 
 1. Python3
